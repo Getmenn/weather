@@ -23,6 +23,7 @@ export const weatherApi:WeatherApi = {
     getCoordCity: async (city) => { //координаты города
         const response: AxiosResponse<any> = await weather.get(`/weather?q=${city}&appid=${apiKey}`);
         const { coord } = response.data;
+        localStorage.setItem('position', JSON.stringify(coord))
         console.log(coord); 
     },
      
