@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 interface Coordinates {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
 }
 
 interface Position {
@@ -10,13 +10,13 @@ interface Position {
   error: string | null;
 }
 
-const usePosition = (): Position => {
-  const [position, setPosition] = useState<Coordinates>({ latitude: 0, longitude: 0 });
+const usePosition = (): Position => { //при определении из браузера город не сохраняется
+  const [position, setPosition] = useState<Coordinates>({ lat: 0, lon: 0 });
   const [error, setError] = useState<string | null>(null);
   let watcher: number;
 
   const onChange = ({ coords }: GeolocationPosition) => {
-    setPosition({ latitude: coords.latitude, longitude: coords.longitude });
+    setPosition({ lat: coords.latitude, lon: coords.longitude });
   };
 
   const onError = (error: GeolocationPositionError) => {
@@ -39,9 +39,9 @@ useEffect(() => {
   }, []);
     
     if (localStorage.getItem('position') === null && error === null) {
-        const { latitude } = position
-        if (latitude !== 0) {
-            localStorage.setItem('position', JSON.stringify(position))
+        const { lat } = position
+        if (lat !== 0) {
+          localStorage.setItem('position', JSON.stringify(position))
         } 
     }
 

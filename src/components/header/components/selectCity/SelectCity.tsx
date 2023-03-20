@@ -3,18 +3,16 @@ import { cities } from "../../../../data/cities"
 import { weatherApi } from "../../../API/weatherApi";
 import "./selectCity.scss"
 
-const SelectCity: React.FC = () => {
+interface ISelectCity{
+    setPosition: (position: boolean) => void;
+}
+
+const SelectCity: React.FC<ISelectCity> = ({setPosition}) => {
 
     const cityRef = useRef<(HTMLInputElement)>(null);
 
-    useEffect(() => {
-        
-    }, [])
-
     const hendleSelectCity = () => { //исправить
         
-        
-
         if (cityRef.current !== null) {
 
             const value = cityRef.current.value
@@ -22,13 +20,13 @@ const SelectCity: React.FC = () => {
             
             if (arr.length > 0) {
                 weatherApi.getCoordCity(arr[0]);
+                localStorage.setItem('city', value)
+                setPosition(true)
             }
-            
-            
+             
         }
         
     }
-
     
     
 
