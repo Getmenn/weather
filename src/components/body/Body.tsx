@@ -6,6 +6,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { weatherApi } from '../API/weatherApi';
+import { windСonverter } from '../../utils/windСonverter';
 
 interface IBody{
     cityStatus: boolean;
@@ -59,21 +60,34 @@ const Body: React.FC<IBody> = ({cityStatus}) => {
     const [ dataWeather, setDataWeather ] = useState<WeatherData | null>(null)
 
     useEffect(() => {
-        if (cityStatus) {
+        console.log(cityStatus);
+        
+        if (cityStatus === true) {
             getWeatherNow()
         }
-        
-        
-        //weatherApi.getWeatherNow() 
     }, [cityStatus])
 
-    const getWeatherNow = async () => {
-        if (localStorage.getItem('position') !== null) {
-            const coords = localStorage.getItem('position') || '0'
-            const {lon, lat} = JSON.parse(coords)
-            const data = await weatherApi.getWeatherNow(lon, lat)
-            setDataWeather(data)
-        }
+    const getWeatherNow =  () => { //приходят неактуаль
+    
+        
+        new Promise<string>((res, rej) => {
+            const coords = localStorage.getItem('position');
+            if (typeof coords === 'string') {
+                res(coords);
+            } else {
+                rej(new Error('Неверный тип координат'));
+            }
+        })
+            .then(coords => {
+                const { lon, lat } = JSON.parse(coords);
+                return weatherApi.getWeatherNow(lon, lat);
+            })
+            .then(data => {
+                setDataWeather(data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
     
 
@@ -98,6 +112,7 @@ const Body: React.FC<IBody> = ({cityStatus}) => {
                             {
                                 dataWeather &&
                                 <>
+                                    <h2>{dataWeather.name}</h2>
                                     <h3>Облачность</h3>
                                     <span>{dataWeather.clouds.all}%</span>
                                     <h3>Температура</h3>
@@ -115,7 +130,7 @@ const Body: React.FC<IBody> = ({cityStatus}) => {
                                     <h3>Скорость ветра</h3>
                                     <span>{dataWeather.wind.speed} м/с</span>
                                     <h3>Направление ветра</h3>
-                                    <span>{dataWeather.wind.deg}</span>
+                                    <span>{windСonverter({deg : dataWeather.wind.deg})}</span>
                                 </>
                             }
                         </TabPanel>

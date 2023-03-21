@@ -41,7 +41,7 @@ const Header: React.FC<IHeader> = ({setCityStatus, cityStatus}) => {
 
     return <div className='header'>
         {cityStatus === false && <SelectCity setPosition={setPosition} />}
-        <span>{localStorage.getItem('city') || 'Не отпределен' }</span>
+        <span onClick={() => {setCityStatus(false); setPosition(false)}}>{localStorage.getItem('city') || 'Не отпределен' }</span>
     </div>
 }
 

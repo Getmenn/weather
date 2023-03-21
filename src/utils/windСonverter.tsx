@@ -4,7 +4,7 @@ interface IWindDeg{
 }
 
 
-const windDeg: React.FC<IWindDeg> = ({ deg }): string => {
+const windСonverter = ({ deg }: IWindDeg): React.ReactNode => { 
     
     switch (true) {
         case (deg <= 22):
@@ -39,4 +39,4 @@ const windDeg: React.FC<IWindDeg> = ({ deg }): string => {
     }
 }
 
-export {windDeg}
+export {windСonverter}

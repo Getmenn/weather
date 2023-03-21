@@ -11,7 +11,7 @@ const SelectCity: React.FC<ISelectCity> = ({setPosition}) => {
 
     const cityRef = useRef<(HTMLInputElement)>(null);
 
-    const hendleSelectCity = () => { //исправить
+    const hendleSelectCity = async () => { //исправить
         
         if (cityRef.current !== null) {
 
@@ -19,7 +19,7 @@ const SelectCity: React.FC<ISelectCity> = ({setPosition}) => {
             const arr = cities.filter(el => el === value)
             
             if (arr.length > 0) {
-                weatherApi.getCoordCity(arr[0]);
+                await weatherApi.getCoordCity(arr[0]);
                 localStorage.setItem('city', value)
                 setPosition(true)
             }
@@ -39,7 +39,7 @@ const SelectCity: React.FC<ISelectCity> = ({setPosition}) => {
                     {cities.map(el => <option key={el}>{el}</option>)}
                 </datalist > 
             </div>
-            <div className="ovelay"></div>
+            <div className="ovelay" onClick={() => setPosition(true)}></div>
         </>
        
     )

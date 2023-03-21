@@ -8,5 +8,11 @@
         margin-left: 30px;
         font-size: 23px;
         color: #2824ff;
+        cursor: pointer;
+
+        &:hover{
+            text-decoration: underline;
+            color: #0300b1;
+        }
     }
 }
