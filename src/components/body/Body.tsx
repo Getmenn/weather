@@ -5,91 +5,20 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { weatherApi } from '../API/weatherApi';
-import { windСonverter } from '../../utils/windСonverter';
-
-interface IBody{
-    cityStatus: boolean;
-}
-
-interface WeatherData {
-    coord: {
-      lon: number;
-      lat: number;
-    };
-    weather: {
-      id: number;
-      main: string;
-      description: string;
-      icon: string;
-    }[];
-    base: string;
-    main: {
-      temp: number;
-      feels_like: number;
-      temp_min: number;
-      temp_max: number;
-      pressure: number;
-      humidity: number;
-    };
-    visibility: number;
-    wind: {
-      speed: number;
-      deg: number;
-    };
-    clouds: {
-      all: number;
-    };
-    dt: number;
-    sys: {
-      type: number;
-      id: number;
-      country: string;
-      sunrise: number;
-      sunset: number;
-    };
-    timezone: number;
-    id: number;
-    name: string;
-    cod: number;
-  }
+import { IBody, IWeatherData } from '../../types/dats';
+import { WeatherToday } from './components/weatherToday/WeatherToday';
+import { getWeatherNow } from './components/getWeatherNow';
 
 const Body: React.FC<IBody> = ({cityStatus}) => {
 
     const [value, setValue] = useState('1');
-    const [ dataWeather, setDataWeather ] = useState<WeatherData | null>(null)
+    const [ dataWeather, setDataWeather ] = useState<IWeatherData | null>(null)
 
-    useEffect(() => {
-        console.log(cityStatus);
-        
+    useEffect(() => {       
         if (cityStatus === true) {
-            getWeatherNow()
+            getWeatherNow(setDataWeather)
         }
     }, [cityStatus])
-
-    const getWeatherNow =  () => { //приходят неактуаль
-    
-        
-        new Promise<string>((res, rej) => {
-            const coords = localStorage.getItem('position');
-            if (typeof coords === 'string') {
-                res(coords);
-            } else {
-                rej(new Error('Неверный тип координат'));
-            }
-        })
-            .then(coords => {
-                const { lon, lat } = JSON.parse(coords);
-                return weatherApi.getWeatherNow(lon, lat);
-            })
-            .then(data => {
-                setDataWeather(data);
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    }
-    
 
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -110,28 +39,9 @@ const Body: React.FC<IBody> = ({cityStatus}) => {
                         <TabPanel value="1">
                             Погода сегодня
                             {
-                                dataWeather &&
-                                <>
-                                    <h2>{dataWeather.name}</h2>
-                                    <h3>Облачность</h3>
-                                    <span>{dataWeather.clouds.all}%</span>
-                                    <h3>Температура</h3>
-                                    <span>{dataWeather.main.temp} °C</span>
-                                    <h3>Минимальная температура</h3>
-                                    <span>{dataWeather.main.temp_min} °C</span>
-                                    <h3>Атмосферное давление</h3>
-                                    <span>{dataWeather.main.pressure} мм рт. ст.</span>
-                                    <h3>Время восхода солнца</h3>
-                                    <span>{new Date(dataWeather.sys.sunrise * 1000).toLocaleString()}</span>
-                                    <h3>Время заката солнца</h3>
-                                    <span>{new Date(dataWeather.sys.sunset * 1000).toLocaleString()}</span>
-                                    <h3>Погодные услови</h3>
-                                    <span>{dataWeather.weather[0].description}</span>
-                                    <h3>Скорость ветра</h3>
-                                    <span>{dataWeather.wind.speed} м/с</span>
-                                    <h3>Направление ветра</h3>
-                                    <span>{windСonverter({deg : dataWeather.wind.deg})}</span>
-                                </>
+                                dataWeather
+                                    ? <WeatherToday dataWeather={dataWeather} />
+                                    : null
                             }
                         </TabPanel>
                         <TabPanel value="2">Погода на 5 дней</TabPanel>

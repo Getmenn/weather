@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import { usePosition } from '../../hooks/usePosition';
+import { IHeader } from '../../types/dats';
 import { SelectCity } from './components/selectCity/SelectCity';
 import './header.scss'
-
-interface IHeader{
-    setCityStatus: (cityStatus: boolean) => void;
-    cityStatus: boolean;
-}
 
 const Header: React.FC<IHeader> = ({setCityStatus, cityStatus}) => {
 
