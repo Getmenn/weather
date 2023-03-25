@@ -42,7 +42,11 @@ export interface IWeatherData {
     id: number;
     name: string;
     cod: number;
-  }
+}
+  
+export interface IWeatherResponse {
+  data: IWeatherData
+}
 
 export interface Icity{
     label: string,

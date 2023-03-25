@@ -1,7 +1,6 @@
-import { useEffect, useRef } from "react"
 import { cities } from "../../../../data/cities"
 import Select from "react-select";
-import { weatherApi } from "../../../API/weatherApi";
+import { weatherApi } from "../../../../API/weatherApi";
 import "./selectCity.scss"
 import { Icity, ISelectCity } from "../../../../types/dats";
 
@@ -9,8 +8,8 @@ const SelectCity: React.FC<ISelectCity> = ({ setPosition }) => {
 
     const handleChange = async (option: Icity | null)  => {
         if (option) {
-            await weatherApi.getCoordCity(option?.value);
-            localStorage.setItem('city', option?.value)
+            //await weatherApi.getCoordCity(option.value);
+            localStorage.setItem('city', option.value)
             setPosition(true)
         }
     };

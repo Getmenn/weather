@@ -20,7 +20,6 @@ const Body: React.FC<IBody> = ({cityStatus}) => {
         }
     }, [cityStatus])
 
-
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
     };
